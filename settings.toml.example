@@ -1,0 +1,5 @@
+from_path = "./Reactive-Resume/client/public/locales/en"
+to_path = "./Reactive-Resume/client/public/locales/is"
+from_lang = 'en-US'
+to_lang = 'is-IS'
+gcp_project = 'sveinbjorn-dev-0123456789ABCDE'

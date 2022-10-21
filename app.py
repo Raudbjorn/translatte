@@ -22,6 +22,8 @@ def walk_strs(node, translate):
 
 
 def translate_txt(txt):
+    if not txt:
+        return txt
     translations = client.translate_text(
         request={
             "parent": f"projects/{settings.gcp_project}",
@@ -37,14 +39,13 @@ def translate_txt(txt):
 def process_file(src_path, target_path):
     with src_path.open('r', encoding='utf-8') as json_file:
         translated = walk_strs(json.load(json_file), translate_txt)
-        translated_path = target_path / src_path.name if isdir(src_path) else src_path.name
+        translated_path = target_path / src_path.name if isdir(src_path) else Path(src_path.name)
 
         if translated_path.exists():
             existing = translated_path.name
             rename = translated_path.stem + str(time.time_ns())
             translated_path = translated_path.with_stem(rename)
             print(f'translated file {existing} already exists, saving to {translated_path}')
-
 
         with open(translated_path, 'w', encoding='utf-8') as target_file:
             print(f'writing translation to {target_file}')
@@ -61,7 +62,7 @@ def run():
             print(f'translating file: {f}')
             process_file(f, dst)
     else:
-        print(f'translating 1 file: {src}')
+        print(f'translating file: {src}')
         process_file(src, dst)
 
 
